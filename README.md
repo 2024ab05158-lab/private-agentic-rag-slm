@@ -2,11 +2,13 @@
 # Private-agentic-rag-slm
 Design and Evaluation of a Self-Correcting, Privacy-Preserving Agentic RAG System using Quantized Small Language Models
 =======
-\## Phase 1: Project Foundation
+
+
+## Phase 1: Project Foundation
 
 
 
-\#Objective
+#Objective
 
 
 
@@ -151,3 +153,124 @@ large model files
 vector DB indexes
 
 >>>>>>> c41e8fb (Initial clean project setup)
+
+
+
+
+# Phase 2 – Private RAG System Implementation
+
+##Overview
+
+Phase 2 focuses on implementing the core Retrieval-Augmented Generation (RAG) pipeline using local Small Language Models (SLMs).
+The system is designed to support private and secure document-based question answering without relying on external cloud APIs.
+
+## Modules Implemented
+
+1. Document Ingestion
+Extracted text from PDF documents using PyMuPDF.
+Supports local document processing.
+
+2. Text Chunking
+Implemented overlapping chunk strategy for efficient retrieval.
+Improves contextual understanding.
+
+3. Embedding Generation
+Used SentenceTransformers (all-MiniLM-L6-v2) to convert text into vector embeddings.
+
+4. Vector Database
+Integrated FAISS for efficient similarity search and retrieval.
+
+5. Semantic Retrieval
+Implemented Top-K similarity retrieval mechanism.
+
+6. Prompt Construction
+Combined retrieved context with user query to create structured prompts.
+
+7. Local SLM Integration
+Integrated Ollama for fully local inference.
+Used quantized Mistral model for response generation.
+
+#Final Architecture Flow
+
+PDF Document
+      ↓
+Document Ingestion
+      ↓
+Text Chunking
+      ↓
+Embedding Generation
+      ↓
+FAISS Vector Database
+      ↓
+Top-K Retrieval
+      ↓
+Prompt Builder
+      ↓
+Small Language Model (Mistral via Ollama)
+      ↓
+Final AI Response
+
+
+# Folder Structure
+
+private-agentic-rag-slm/
+│
+├── application/
+│   ├── ingest/
+│   ├── chunk/
+│   ├── embedd/
+│   ├── vectordb/
+│   ├── retrieve/
+│   ├── rag_pipeline/
+│   └── slm/
+│
+├── data/
+├── models/
+├── notebooks/
+├── docus/
+├── testing/
+│
+├── main.py
+├── requirements.txt
+└── README.md
+
+ Technologies Used
+
+	Component				Technology
+
+Programming Language				Python
+Document Parsing				PyMuPDF
+Embedding Model					SentenceTransformers
+Vector Database					FAISS
+Local SLM Runtime				Ollama
+Small Language Model				Mistral
+Environment					Python Virtual Environment
+
+ # How to Run the Project
+
+Step 1 – Activate Virtual Environment
+venv\Scripts\activate
+
+Step 2 – Start Local SLM
+
+Open a separate terminal and run:
+
+ollama run mistral
+
+Step 3 – Run the Application
+python main.py
+
+
+##Features Achieved in Phase 2
+
+Fully local RAG pipeline
+
+Private document processing
+
+Retrieval-based context grounding
+
+Quantized SLM integration
+
+Modular project architecture
+
+Local inference without cloud APIs
