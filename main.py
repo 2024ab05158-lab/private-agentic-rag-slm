@@ -1,69 +1,110 @@
-# main.py
-# Entry point for Private Agentic RAG System (Phase 2 MVP)
+from application.embedd.embedder import model
 
-from application.ingest.pdf_loader import load_pdf
-from application.chunk.text_splitter import split_text
-
-from application.embedd.embedder import get_embeddings, model
 from application.vectordb.faiss_store import VectorStore
 
 from application.retrieve.retriever import retrieve
-from application.rag_pipeline.rag import build_prompt, get_query_embedding
+
+from application.rag_pipeline.rag import (
+    build_prompt,
+    get_query_embedding
+)
 
 from application.slm.slm import generate_response
 
 
-def build_rag_pipeline(pdf_path, query):
-    """
-    End-to-end RAG pipeline:
-    1. Load document
-    2. Chunk text
-    3. Create embeddings
-    4. Store in vector DB
-    5. Retrieve relevant context
-    6. Build prompt
-    7. Send to SLM
-    """
+INDEX_PATH = "data/vector_db/faiss.index"
 
-    # Step 1: Load document
-    text = load_pdf(pdf_path)
+METADATA_PATH = "data/vector_db/metadata.pkl"
 
-    # Step 2: Chunk text
-    chunks = split_text(text)
 
-    # Step 3: Create embeddings for chunks
-    embeddings = get_embeddings(chunks)
+def load_vector_database():
 
-    # Step 4: Initialize vector store
-    dimension = len(embeddings[0])
-    store = VectorStore(dimension)
-    store.add(embeddings, chunks)
+    store = VectorStore()
 
-    # Step 5: Query embedding
-    query_embedding = get_query_embedding(query)
+    store.load(
+        INDEX_PATH,
+        METADATA_PATH
+    )
 
-    # Step 6: Retrieve relevant chunks
-    context_chunks = retrieve(store, query_embedding)
+    return store
 
-    # Step 7: Build prompt
-    prompt = build_prompt(context_chunks, query)
 
-    # Step 8: Generate final answer using SLM (IMPORTANT FIX)
-    final_answer = generate_response(prompt)
+def display_sources(results):
 
-    return prompt, final_answer
+    unique_sources = []
+
+    for item in results:
+
+        source = item["source"]
+
+        if source not in unique_sources:
+
+            unique_sources.append(source)
+
+    print("\nSources Used:")
+
+    for source in unique_sources:
+
+        print(f"✓ {source}")
+
+
+def start_chat():
+
+    print("=" * 60)
+
+    print("Private Agentic RAG System")
+
+    print("=" * 60)
+
+    print("\nLoading vector database...")
+
+    store = load_vector_database()
+
+    print("Ready!")
+
+    while True:
+
+        query = input("\nEnter your question (or type exit): ")
+
+        if query.lower() == "exit":
+
+            print("\nGoodbye!")
+
+            break
+
+        query_embedding = get_query_embedding(query)
+
+        context_chunks = retrieve(
+            store,
+            query_embedding
+        )
+
+        prompt = build_prompt(
+            context_chunks,
+            query
+        )
+
+        answer = generate_response(
+            prompt
+        )
+
+        print("\n")
+
+        print("=" * 60)
+
+        print("ANSWER")
+
+        print("=" * 60)
+
+        print(answer)
+
+        display_sources(
+            context_chunks
+        )
+
+        print("\n")
 
 
 if __name__ == "__main__":
 
-    pdf_path = "data/sample.pdf"
-
-    query = input("Enter your question: ")
-
-    prompt, answer = build_rag_pipeline(pdf_path, query)
-
-    print("\n================ FINAL PROMPT ================\n")
-    print(prompt)
-
-    print("\n================ FINAL ANSWER (SLM RESPONSE) ================\n")
-    print(answer)
+    start_chat()

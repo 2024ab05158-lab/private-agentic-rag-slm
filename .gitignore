@@ -216,3 +216,21 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# FAISS index
+data/vector_db/
+
+# Logs
+logs/
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
