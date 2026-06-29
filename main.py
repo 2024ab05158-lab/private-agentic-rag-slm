@@ -6,21 +6,30 @@ Entry point for the Private Agentic RAG System
 Author : Kathula Deepak
 Version : Phase2
 """
+from unittest import result
+
 from application.logger.experiment_logger import ExperimentLogger
 
 from config import (
     FAISS_INDEX,
     METADATA_FILE,
+
     SLM_MODEL,
     EMBEDDING_MODEL,
-    TOP_K
+
+    CHUNK_SIZE,
+    CHUNK_OVERLAP,
+
+    TOP_K,
+
+    PROJECT_NAME,
+    VERSION
 )
 
 from application.vectordb.faiss_store import VectorStore
 from application.retrieve.retriever import retrieve
 from application.rag_pipeline.rag import (
-    build_prompt,
-    get_query_embedding
+    run_query_pipeline
 )
 from application.slm.slm import generate_response
 
@@ -90,6 +99,12 @@ def start_chat():
 
     store = load_vector_database()
 
+    database_info = store.get_database_summary()
+
+    document_count = database_info["documents"]
+
+    total_chunks = database_info["chunks"]
+
     logger = ExperimentLogger()
 
     print("Vector Database Loaded Successfully!")
@@ -104,25 +119,40 @@ def start_chat():
 
             break
 
-        query_embedding = get_query_embedding(query)
-
-        context_chunks = retrieve(
+        result = run_query_pipeline(
             store,
-            query_embedding
-        )
-
-        prompt = build_prompt(
-            context_chunks,
             query
         )
 
-        answer = generate_response(
-            prompt
-        )
+        answer = result["answer"]
+
+        context_chunks = result["context_chunks"]
 
         logger.log(
-            model=SLM_MODEL,
+            config={
+
+                "project": PROJECT_NAME,
+
+                "version": VERSION,
+
+                "model": SLM_MODEL,
+
+                "embedding": EMBEDDING_MODEL,
+
+                "chunk_size": CHUNK_SIZE,
+
+                "overlap": CHUNK_OVERLAP,
+
+                "top_k": TOP_K,
+
+                "documents": document_count,
+
+                "chunks": total_chunks
+
+            },
+
             question=query,
+
             answer=answer
         )
 

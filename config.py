@@ -9,6 +9,23 @@ Privacy-Preserving Agentic RAG System using Quantized
 Small Language Models
 """
 
+
+##########################################################
+# PROJECT INFORMATION
+##########################################################
+
+PROJECT_NAME = "Private Agentic RAG"
+
+VERSION = "Phase2"
+
+AUTHOR = "Kathula Deepak"
+
+DISSERTATION_TITLE = (
+    "Design and Evaluation of a Self-Correcting, "
+    "Privacy-Preserving Agentic RAG System using "
+    "Quantized Small Language Models"
+)
+
 ##########################################################
 # SLM CONFIGURATION
 ##########################################################

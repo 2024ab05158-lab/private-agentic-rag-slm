@@ -4,7 +4,9 @@ from datetime import datetime
 
 from config import (
     EXPERIMENT_LOG,
-    ENABLE_LOGGER
+    ENABLE_LOGGER,
+    PROJECT_NAME,
+    VERSION
 )
 
 
@@ -31,7 +33,15 @@ class ExperimentLogger:
                 writer.writerow([
                     "ExperimentID",
                     "Timestamp",
+                    "Project",
+                    "Version",
                     "Model",
+                    "EmbeddingModel",
+                    "ChunkSize",
+                    "ChunkOverlap",
+                    "TopK",
+                    "DocumentCount",
+                    "TotalChunks",
                     "Question",
                     "Answer",
                     "AnswerLength",
@@ -40,7 +50,7 @@ class ExperimentLogger:
 
     def log(
         self,
-        model,
+        config,
         question,
         answer,
         status="Success"
@@ -65,9 +75,25 @@ class ExperimentLogger:
             writer.writerow([
                 experiment_id,
                 timestamp,
-                model,
+
+                config["project"],
+                config["version"],
+
+                config["model"],
+                config["embedding"],
+
+                config["chunk_size"],
+                config["overlap"],
+
+                config["top_k"],
+
+                config["documents"],
+                config["chunks"],
+
                 question,
                 answer,
+
                 len(answer),
+
                 status
             ])

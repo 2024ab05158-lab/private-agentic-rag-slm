@@ -23,7 +23,7 @@ class VectorStore:
     def add(self, embeddings, chunk_metadata):
 
         self.index.add(
-        np.array(embeddings).astype("float32")
+            np.array(embeddings).astype("float32")
         )
 
         self.chunk_metadata.extend(chunk_metadata)
@@ -40,20 +40,30 @@ class VectorStore:
         for idx in indices[0]:
 
             if idx != -1:
-                results.append(self.chunk_metadata[idx])
+
+                results.append(
+                    self.chunk_metadata[idx]
+                )
 
         return results
 
     def save(self, index_path, metadata_path):
 
-        os.makedirs(os.path.dirname(index_path), exist_ok=True)
+        os.makedirs(
+            os.path.dirname(index_path),
+            exist_ok=True
+        )
 
         faiss.write_index(
             self.index,
             index_path
         )
 
-        with open(metadata_path, "wb") as f:
+        with open(
+            metadata_path,
+            "wb"
+        ) as f:
+
             pickle.dump(
                 self.chunk_metadata,
                 f
@@ -65,5 +75,62 @@ class VectorStore:
             index_path
         )
 
-        with open(metadata_path, "rb") as f:
+        with open(
+            metadata_path,
+            "rb"
+        ) as f:
+
             self.chunk_metadata = pickle.load(f)
+
+    # ====================================================
+    # Helper Methods
+    # ====================================================
+
+    def get_total_chunks(self):
+        """
+        Returns the total number of chunks
+        stored in the vector database.
+        """
+
+        return len(self.chunk_metadata)
+
+    def get_document_names(self):
+        """
+        Returns a sorted list of unique
+        document names.
+        """
+
+        documents = set()
+
+        for item in self.chunk_metadata:
+
+            documents.add(
+                item["source"]
+            )
+
+        return sorted(documents)
+
+    def get_document_count(self):
+        """
+        Returns the number of unique
+        documents indexed.
+        """
+
+        return len(
+            self.get_document_names()
+        )
+
+    def get_database_summary(self):
+        """
+        Returns database statistics.
+        """
+
+        return {
+
+            "documents": self.get_document_count(),
+
+            "chunks": self.get_total_chunks(),
+
+            "document_names": self.get_document_names()
+
+        }
