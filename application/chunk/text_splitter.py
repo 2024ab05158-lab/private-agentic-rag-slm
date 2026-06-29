@@ -1,7 +1,23 @@
-def split_text(text, chunk_size=700, overlap=150):
+from config import CHUNK_SIZE, CHUNK_OVERLAP
+
+
+def split_text(
+    text,
+    chunk_size=CHUNK_SIZE,
+    overlap=CHUNK_OVERLAP
+):
     """
-    Split long text into smaller overlapping chunks.
+    Split text into overlapping chunks.
+
+    Args:
+        text (str): Input document text.
+        chunk_size (int): Size of each chunk.
+        overlap (int): Number of overlapping characters.
+
+    Returns:
+        list: List of text chunks.
     """
+
     chunks = []
     start = 0
 

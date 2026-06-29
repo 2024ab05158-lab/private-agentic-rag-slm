@@ -1,3 +1,5 @@
+from config import SLM_MODEL
+
 import requests
 
 
@@ -10,7 +12,7 @@ def generate_response(prompt):
     url = "http://localhost:11434/api/generate"
 
     payload = {
-        "model": "mistral",
+        "model": SLM_MODEL,
         "prompt": prompt,
         "stream": False
     }

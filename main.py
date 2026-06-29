@@ -1,23 +1,37 @@
-from application.embedd.embedder import model
+"""
+main.py
+------------------------------------
+Entry point for the Private Agentic RAG System
+
+Author : Kathula Deepak
+Version : Phase2
+"""
+
+from config import (
+    FAISS_INDEX,
+    METADATA_FILE,
+    SLM_MODEL,
+    EMBEDDING_MODEL,
+    TOP_K
+)
 
 from application.vectordb.faiss_store import VectorStore
-
 from application.retrieve.retriever import retrieve
-
 from application.rag_pipeline.rag import (
     build_prompt,
     get_query_embedding
 )
-
 from application.slm.slm import generate_response
 
 
-INDEX_PATH = "data/vector_db/faiss.index"
-
-METADATA_PATH = "data/vector_db/metadata.pkl"
+INDEX_PATH = FAISS_INDEX
+METADATA_PATH = METADATA_FILE
 
 
 def load_vector_database():
+    """
+    Load the persisted FAISS vector database.
+    """
 
     store = VectorStore()
 
@@ -30,6 +44,9 @@ def load_vector_database():
 
 
 def display_sources(results):
+    """
+    Display unique source documents used to answer the query.
+    """
 
     unique_sources = []
 
@@ -48,23 +65,35 @@ def display_sources(results):
         print(f"✓ {source}")
 
 
+def print_system_info():
+    """
+    Display current system configuration.
+    """
+
+    print("=" * 60)
+    print("Private Agentic RAG System")
+    print("=" * 60)
+
+    print(f"SLM Model        : {SLM_MODEL}")
+    print(f"Embedding Model  : {EMBEDDING_MODEL}")
+    print(f"Top-K Retrieval  : {TOP_K}")
+
+    print("=" * 60)
+
+
 def start_chat():
 
-    print("=" * 60)
+    print_system_info()
 
-    print("Private Agentic RAG System")
-
-    print("=" * 60)
-
-    print("\nLoading vector database...")
+    print("\nLoading Vector Database...")
 
     store = load_vector_database()
 
-    print("Ready!")
+    print("Vector Database Loaded Successfully!")
 
     while True:
 
-        query = input("\nEnter your question (or type exit): ")
+        query = input("\nEnter your question (or type 'exit'): ")
 
         if query.lower() == "exit":
 
@@ -91,9 +120,7 @@ def start_chat():
         print("\n")
 
         print("=" * 60)
-
         print("ANSWER")
-
         print("=" * 60)
 
         print(answer)

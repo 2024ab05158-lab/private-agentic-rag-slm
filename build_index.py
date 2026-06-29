@@ -1,75 +1,114 @@
+"""
+build_index.py
+------------------------------------
+Creates the FAISS Vector Database
+from all PDF documents.
+
+Author : Kathula Deepak
+Version : Phase2
+"""
+
 import os
+
+from config import (
+    DOCUMENT_FOLDER,
+    FAISS_INDEX,
+    METADATA_FILE
+)
 
 from application.ingest.pdf_loader import load_pdf
 from application.chunk.text_splitter import split_text
-
 from application.embedd.embedder import get_embeddings
 from application.vectordb.faiss_store import VectorStore
 
 
-DOCUMENT_FOLDER = "data/documents"
-
-INDEX_PATH = "data/vector_db/faiss.index"
-METADATA_PATH = "data/vector_db/metadata.pkl"
+INDEX_PATH = FAISS_INDEX
+METADATA_PATH = METADATA_FILE
 
 
-all_metadata = []
-all_embeddings = []
+def build_vector_database():
 
-print("Scanning documents...\n")
+    all_metadata = []
+    all_embeddings = []
 
-for file_name in os.listdir(DOCUMENT_FOLDER):
+    print("=" * 60)
+    print("Scanning Documents")
+    print("=" * 60)
 
-    if file_name.lower().endswith(".pdf"):
+    pdf_count = 0
 
-        file_path = os.path.join(
-            DOCUMENT_FOLDER,
-            file_name
-        )
+    for file_name in os.listdir(DOCUMENT_FOLDER):
 
-        print(f"Reading: {file_name}")
+        if file_name.lower().endswith(".pdf"):
 
-        text = load_pdf(file_path)
+            pdf_count += 1
 
-        chunks = split_text(text)
+            file_path = os.path.join(
+                DOCUMENT_FOLDER,
+                file_name
+            )
 
-        embeddings = get_embeddings(chunks)
+            print(f"\nReading: {file_name}")
 
-        for i, chunk in enumerate(chunks):
+            text = load_pdf(file_path)
 
-            chunk_info = {
+            chunks = split_text(text)
 
-                "text": chunk,
+            embeddings = get_embeddings(chunks)
 
-                "source": file_name,
+            print(f"Chunks Created : {len(chunks)}")
 
-                "chunk_id": i,
+            for i, chunk in enumerate(chunks):
 
-                "total_chunks": len(chunks)
+                chunk_info = {
 
-            }
+                    "text": chunk,
 
-            all_metadata.append(chunk_info)
+                    "source": file_name,
 
-        all_embeddings.extend(embeddings)
+                    "chunk_id": i + 1,
+
+                    "total_chunks": len(chunks)
+
+                }
+
+                all_metadata.append(chunk_info)
+
+            all_embeddings.extend(embeddings)
+
+    print("\n")
+    print("=" * 60)
+    print("Creating FAISS Index")
+    print("=" * 60)
+
+    dimension = len(all_embeddings[0])
+
+    store = VectorStore(dimension)
+
+    store.add(
+        all_embeddings,
+        all_metadata
+    )
+
+    print("\nSaving Index...")
+
+    store.save(
+        INDEX_PATH,
+        METADATA_PATH
+    )
+
+    print("\n")
+    print("=" * 60)
+    print("Index Created Successfully")
+    print("=" * 60)
+
+    print(f"PDF Documents : {pdf_count}")
+    print(f"Total Chunks  : {len(all_metadata)}")
+
+    print(f"\nIndex File    : {INDEX_PATH}")
+    print(f"Metadata File : {METADATA_PATH}")
 
 
-print("\nCreating FAISS index...")
+if __name__ == "__main__":
 
-dimension = len(all_embeddings[0])
-
-store = VectorStore(dimension)
-
-store.add(
-    all_embeddings,
-    all_metadata
-)
-
-print("Saving index...")
-
-store.save(
-    INDEX_PATH,
-    METADATA_PATH
-)
-
-print("\nIndex created successfully!")
+    build_vector_database()
