@@ -131,6 +131,7 @@ def start_chat():
 
         metrics = result["metrics"]
 
+
         logger.log(
             config={
 
@@ -153,6 +154,8 @@ def start_chat():
                 "chunks": total_chunks
 
             },
+
+            metrics=metrics,
 
             question=query,
 

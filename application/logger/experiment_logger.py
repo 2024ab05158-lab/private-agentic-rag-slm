@@ -33,24 +33,49 @@ class ExperimentLogger:
                 writer.writerow([
                     "ExperimentID",
                     "Timestamp",
+
                     "Project",
                     "Version",
+
                     "Model",
                     "EmbeddingModel",
+
                     "ChunkSize",
                     "ChunkOverlap",
                     "TopK",
+
                     "DocumentCount",
                     "TotalChunks",
+
+                    "EmbeddingTime",
+                    "RetrievalTime",
+                    "PromptTime",
+                    "GenerationTime",
+                    "TotalTime",
+
+                    "CPUPercent",
+                    "RAMPercent",
+                    "RAMUsedGB",
+                    "RAMAvailableGB",
+
+                    "RetrievedDocuments",
+                    "RetrievedChunkCount",
+                    "RetrievedChunkIDs",
+
+                    "AnswerLength",
+                    "WordCount",
+                    "CharacterCount",
+
                     "Question",
                     "Answer",
-                    "AnswerLength",
+
                     "Status"
                 ])
 
     def log(
         self,
         config,
+        metrics,
         question,
         answer,
         status="Success"
@@ -73,6 +98,7 @@ class ExperimentLogger:
             writer = csv.writer(file)
 
             writer.writerow([
+
                 experiment_id,
                 timestamp,
 
@@ -84,16 +110,32 @@ class ExperimentLogger:
 
                 config["chunk_size"],
                 config["overlap"],
-
                 config["top_k"],
 
                 config["documents"],
                 config["chunks"],
 
+                round(metrics.embedding_time, 4),
+                round(metrics.retrieval_time, 4),
+                round(metrics.prompt_time, 4),
+                round(metrics.generation_time, 4),
+                round(metrics.total_time, 4),
+
+                metrics.cpu_percent,
+                metrics.ram_percent,
+                metrics.ram_used_gb,
+                metrics.ram_available_gb,
+
+                ", ".join(metrics.retrieved_documents),
+                metrics.retrieved_chunk_count,
+                ", ".join(map(str, metrics.retrieved_chunk_ids)),
+
+                metrics.answer_length,
+                metrics.word_count,
+                metrics.character_count,
+
                 question,
                 answer,
-
-                len(answer),
 
                 status
             ])
