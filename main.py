@@ -124,9 +124,12 @@ def start_chat():
             query
         )
 
+
         answer = result["answer"]
 
         context_chunks = result["context_chunks"]
+
+        metrics = result["metrics"]
 
         logger.log(
             config={
