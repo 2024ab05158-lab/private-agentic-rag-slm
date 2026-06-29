@@ -6,6 +6,7 @@ Entry point for the Private Agentic RAG System
 Author : Kathula Deepak
 Version : Phase2
 """
+from application.logger.experiment_logger import ExperimentLogger
 
 from config import (
     FAISS_INDEX,
@@ -89,6 +90,8 @@ def start_chat():
 
     store = load_vector_database()
 
+    logger = ExperimentLogger()
+
     print("Vector Database Loaded Successfully!")
 
     while True:
@@ -115,6 +118,12 @@ def start_chat():
 
         answer = generate_response(
             prompt
+        )
+
+        logger.log(
+            model=SLM_MODEL,
+            question=query,
+            answer=answer
         )
 
         print("\n")

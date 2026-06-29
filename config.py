@@ -69,3 +69,14 @@ ENABLE_LOGGER = True
 PROJECT_NAME = "Private Agentic RAG"
 
 VERSION = "Phase2"
+
+
+##########################################################
+# EXPERIMENT LOGGER
+##########################################################
+
+LOG_FOLDER = "logs"
+
+EXPERIMENT_LOG = "logs/experiment_log.csv"
+
+ENABLE_LOGGER = True
