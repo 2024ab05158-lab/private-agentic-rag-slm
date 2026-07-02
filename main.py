@@ -28,6 +28,7 @@ from config import (
 
 from application.vectordb.faiss_store import VectorStore
 from application.retrieve.retriever import retrieve
+from application.logger.experiment import Experiment
 from application.rag_pipeline.rag import (
     run_query_pipeline
 )
