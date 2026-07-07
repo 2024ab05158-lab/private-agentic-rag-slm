@@ -13,16 +13,26 @@ Components:
 """
 
 
+import time
+import psutil
+
+
 from application.agents.planner_agent import PlannerAgent
 from application.agents.retrieval_agent import RetrievalAgent
 from application.agents.reflection_agent import ReflectionAgent
+
+
+from application.rag_pipeline.pipeline_metrics import PipelineMetrics
+
 
 from application.rag_pipeline.rag import (
     get_query_embedding,
     build_prompt
 )
 
+
 from application.slm.slm import generate_response
+
 
 
 class AgenticRAG:
@@ -33,13 +43,17 @@ class AgenticRAG:
             vector_store
     ):
 
+
         self.planner = PlannerAgent()
+
 
         self.retriever = RetrievalAgent(
             vector_store
         )
 
+
         self.reflector = ReflectionAgent()
+
 
 
     def run(
@@ -51,27 +65,52 @@ class AgenticRAG:
         retry_count = 0
 
 
-        # -------------------------------
-        # Step 1: Planning
-        # -------------------------------
+        metrics = PipelineMetrics()
+
+
+        total_start = time.perf_counter()
+
+
+
+        # ----------------------------------
+        # Step 1 - Planner Agent
+        # ----------------------------------
+
 
         plan = self.planner.analyze_query(
             query
         )
 
 
-        # -------------------------------
-        # Step 2: Embedding
-        # -------------------------------
+
+        # ----------------------------------
+        # Step 2 - Query Embedding
+        # ----------------------------------
+
+
+        start = time.perf_counter()
+
 
         query_embedding = get_query_embedding(
             query
         )
 
 
-        # -------------------------------
-        # Step 3: Adaptive Retrieval
-        # -------------------------------
+        metrics.embedding_time = (
+            time.perf_counter()
+            -
+            start
+        )
+
+
+
+        # ----------------------------------
+        # Step 3 - Adaptive Retrieval
+        # ----------------------------------
+
+
+        start = time.perf_counter()
+
 
         retrieval_result = self.retriever.retrieve_context(
             query_embedding,
@@ -79,12 +118,26 @@ class AgenticRAG:
         )
 
 
-        context_chunks = retrieval_result["context"]
+        metrics.retrieval_time = (
+            time.perf_counter()
+            -
+            start
+        )
 
 
-        # -------------------------------
-        # Step 4: Prompt Creation
-        # -------------------------------
+        context_chunks = retrieval_result[
+            "context"
+        ]
+
+
+
+        # ----------------------------------
+        # Step 4 - Prompt Creation
+        # ----------------------------------
+
+
+        start = time.perf_counter()
+
 
         prompt = build_prompt(
             context_chunks,
@@ -92,18 +145,39 @@ class AgenticRAG:
         )
 
 
-        # -------------------------------
-        # Step 5: Generate Answer
-        # -------------------------------
+        metrics.prompt_time = (
+            time.perf_counter()
+            -
+            start
+        )
+
+
+
+        # ----------------------------------
+        # Step 5 - Generate Response
+        # ----------------------------------
+
+
+        start = time.perf_counter()
+
 
         answer = generate_response(
             prompt
         )
 
 
-        # -------------------------------
-        # Step 6: Reflection
-        # -------------------------------
+        metrics.generation_time = (
+            time.perf_counter()
+            -
+            start
+        )
+
+
+
+        # ----------------------------------
+        # Step 6 - Reflection Agent
+        # ----------------------------------
+
 
         reflection = self.reflector.evaluate(
             query,
@@ -112,17 +186,25 @@ class AgenticRAG:
         )
 
 
-        # -------------------------------
-        # Step 7: Self Correction
-        # -------------------------------
 
-        if reflection["retry_required"]:
+        # ----------------------------------
+        # Step 7 - Self Correction
+        # ----------------------------------
+
+
+        if reflection[
+            "retry_required"
+        ]:
 
 
             retry_count += 1
 
 
-            plan["recommended_top_k"] += 2
+
+            plan[
+                "recommended_top_k"
+            ] += 2
+
 
 
             retrieval_result = self.retriever.retrieve_context(
@@ -131,7 +213,10 @@ class AgenticRAG:
             )
 
 
-            context_chunks = retrieval_result["context"]
+            context_chunks = retrieval_result[
+                "context"
+            ]
+
 
 
             prompt = build_prompt(
@@ -140,9 +225,21 @@ class AgenticRAG:
             )
 
 
+
+            start = time.perf_counter()
+
+
             answer = generate_response(
                 prompt
             )
+
+
+            metrics.generation_time += (
+                time.perf_counter()
+                -
+                start
+            )
+
 
 
             reflection = self.reflector.evaluate(
@@ -152,22 +249,184 @@ class AgenticRAG:
             )
 
 
+
+        # ----------------------------------
+        # Final Performance Metrics
+        # ----------------------------------
+
+
+        metrics.total_time = (
+            time.perf_counter()
+            -
+            total_start
+        )
+
+
+
+        memory = psutil.virtual_memory()
+
+
+
+        metrics.cpu_percent = psutil.cpu_percent()
+
+
+
+        metrics.ram_percent = memory.percent
+
+
+
+        metrics.ram_used_gb = round(
+            memory.used / (1024 ** 3),
+            2
+        )
+
+
+
+        metrics.ram_available_gb = round(
+            memory.available / (1024 ** 3),
+            2
+        )
+
+
+
+        metrics.retrieved_documents = list(
+            set(
+                [
+                    item["source"]
+                    for item in context_chunks
+                ]
+            )
+        )
+
+
+
+        metrics.retrieved_chunk_count = len(
+            context_chunks
+        )
+
+
+
+        metrics.retrieved_chunk_ids = [
+
+            item["chunk_id"]
+
+            for item in context_chunks
+
+            if "chunk_id" in item
+
+        ]
+
+
+
+        metrics.answer_length = len(
+            answer
+        )
+
+
+
+        metrics.word_count = len(
+            answer.split()
+        )
+
+
+
+        metrics.character_count = len(
+            answer
+        )
+
+
+
+        # ----------------------------------
+        # Final Agentic Output
+        # ----------------------------------
+
+
         return {
 
+
             "mode": "Agentic RAG",
-            
+
+
             "query": query,
+
 
             "answer": answer,
 
+
+            "context_chunks": context_chunks,
+
+
             "plan": plan,
 
-            "context": context_chunks,
 
             "reflection": reflection,
 
+
             "retry_count": retry_count,
 
-            "self_corrected": retry_count > 0
+
+            "self_corrected": retry_count > 0,
+
+
+            "metrics": metrics,
+
+
+
+            "agentic_metrics": {
+
+
+                "pipeline_mode": "Agentic RAG",
+
+
+                "query_type": plan[
+                    "query_type"
+                ],
+
+
+                "retrieval_strategy": plan[
+                    "retrieval_strategy"
+                ],
+
+
+                "dynamic_top_k": plan[
+                    "recommended_top_k"
+                ],
+
+
+
+                "confidence_score": reflection[
+                    "confidence_score"
+                ],
+
+
+                "similarity_score": reflection[
+                    "similarity_score"
+                ],
+
+
+                "retrieval_score": reflection[
+                    "retrieval_score"
+                ],
+
+
+                "completeness_score": reflection[
+                    "completeness_score"
+                ],
+
+
+                "uncertainty_score": reflection[
+                    "uncertainty_score"
+                ],
+
+
+
+                "retry_count": retry_count,
+
+
+                "self_corrected": retry_count > 0
+
+
+            }
+
 
         }
