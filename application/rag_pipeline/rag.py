@@ -228,6 +228,8 @@ def run_query_pipeline(store, query):
 
     return {
 
+        "mode": "Core RAG",
+
         "query": query,
 
         "query_embedding": query_embedding,

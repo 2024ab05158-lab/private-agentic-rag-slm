@@ -154,6 +154,8 @@ class AgenticRAG:
 
         return {
 
+            "mode": "Agentic RAG",
+            
             "query": query,
 
             "answer": answer,
