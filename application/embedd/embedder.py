@@ -1,10 +1,42 @@
+"""
+embedder.py
+---------------------------------------
+Local embedding model loader.
+
+Supports privacy-preserving offline RAG.
+"""
+
+
+import os
+
 from sentence_transformers import SentenceTransformer
 
-model = SentenceTransformer("all-MiniLM-L6-v2")
 
-def get_embeddings(text_list):
-    """
-    Convert list of text chunks into embeddings.
-    """
-    embeddings = model.encode(text_list)
+BASE_DIR = os.path.dirname(
+    os.path.dirname(
+        os.path.dirname(
+            os.path.abspath(__file__)
+        )
+    )
+)
+
+
+MODEL_PATH = os.path.join(
+    BASE_DIR,
+    "models",
+    "all-MiniLM-L6-v2"
+)
+
+
+model = SentenceTransformer(
+    MODEL_PATH
+)
+
+
+def get_embeddings(texts):
+
+    embeddings = model.encode(
+        texts
+    )
+
     return embeddings

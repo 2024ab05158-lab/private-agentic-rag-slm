@@ -234,3 +234,6 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local embedding models
+models/
