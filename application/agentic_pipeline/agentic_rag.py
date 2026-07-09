@@ -20,6 +20,7 @@ import psutil
 from application.agents.planner_agent import PlannerAgent
 from application.agents.retrieval_agent import RetrievalAgent
 from application.agents.reflection_agent import ReflectionAgent
+from application.agents.relevance_agent import RelevanceAgent
 
 
 from application.rag_pipeline.pipeline_metrics import PipelineMetrics
@@ -53,6 +54,8 @@ class AgenticRAG:
 
 
         self.reflector = ReflectionAgent()
+
+        self.relevance_agent = RelevanceAgent()
 
 
 
@@ -114,7 +117,9 @@ class AgenticRAG:
 
         retrieval_result = self.retriever.retrieve_context(
             query_embedding,
-            plan
+            plan,
+            query
+
         )
 
 
@@ -129,7 +134,159 @@ class AgenticRAG:
             "context"
         ]
 
+        # ----------------------------------
+        # ReRanking Metrics
+        # ----------------------------------
 
+
+        metrics.reranking_enabled = retrieval_result[
+            "reranking_enabled"
+        ]
+
+
+        metrics.reranking_time = retrieval_result[
+            "reranking_time"
+        ]
+
+
+        metrics.average_rerank_score = retrieval_result[
+            "average_rerank_score"
+        ]
+
+        # ----------------------------------
+        # Step 4 - Relevance Validation
+        # ----------------------------------
+
+
+        relevance = self.relevance_agent.validate(
+
+            context_chunks,
+
+            plan
+
+        )
+
+
+        metrics.knowledge_available = relevance[
+
+            "knowledge_available"
+
+        ]
+
+
+        metrics.relevance_score = relevance[
+
+            "relevance_score"
+
+        ]
+
+
+
+        if not relevance[
+
+            "knowledge_available"
+
+        ]:
+
+
+            metrics.generation_skipped = True
+
+
+            return {
+
+
+                "mode": "Agentic RAG",
+
+
+                "query": query,
+
+
+                "answer":
+
+                    "The uploaded knowledge base does not contain sufficient information to answer this question.",
+
+
+                "context_chunks": context_chunks,
+
+
+                "plan": plan,
+
+
+                "reflection": {
+
+
+                    "confidence_score": 0,
+
+
+                    "similarity_score": 0,
+
+
+                    "retrieval_score": 0,
+
+
+                    "completeness_score": 0,
+
+
+                    "uncertainty_score": 1
+
+
+                },
+
+
+                "retry_count": 0,
+
+
+                "self_corrected": False,
+
+
+                "metrics": metrics,
+
+
+                "agentic_metrics": {
+
+
+                    "pipeline_mode": "Agentic RAG",
+
+
+                    "query_type": plan[
+                        "query_type"
+                    ],
+
+
+                    "retrieval_strategy": plan[
+                        "retrieval_strategy"
+                    ],
+
+
+                    "dynamic_top_k": plan[
+                        "recommended_top_k"
+                    ],
+
+
+                    "confidence_score": 0,
+
+
+                    "similarity_score": 0,
+
+
+                    "retrieval_score": 0,
+
+
+                    "completeness_score": 0,
+
+
+                    "uncertainty_score": 1,
+
+
+                    "retry_count": 0,
+
+
+                    "self_corrected": False
+
+
+                }
+
+            }
 
         # ----------------------------------
         # Step 4 - Prompt Creation
@@ -209,7 +366,8 @@ class AgenticRAG:
 
             retrieval_result = self.retriever.retrieve_context(
                 query_embedding,
-                plan
+                plan,
+                query
             )
 
 
@@ -217,6 +375,19 @@ class AgenticRAG:
                 "context"
             ]
 
+            metrics.reranking_enabled = retrieval_result[
+                "reranking_enabled"
+            ]
+
+
+            metrics.reranking_time += retrieval_result[
+                "reranking_time"
+            ]
+
+
+            metrics.average_rerank_score = retrieval_result[
+                "average_rerank_score"
+            ]
 
 
             prompt = build_prompt(

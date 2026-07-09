@@ -237,3 +237,29 @@ Thumbs.db
 
 # Local embedding models
 models/
+models/
+logs/
+__pycache__/
+*.pyc
+venv/
+
+# Virtual Environment
+venv/
+
+
+# Python Cache
+__pycache__/
+*.pyc
+
+
+# Local Models
+models/
+
+
+# Logs
+logs/
+
+
+# FAISS Database
+vector_db/
+*.index

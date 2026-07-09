@@ -6,9 +6,7 @@ from datetime import datetime
 
 from config import (
     EXPERIMENT_LOG,
-    ENABLE_LOGGER,
-    PROJECT_NAME,
-    VERSION
+    ENABLE_LOGGER
 )
 
 
@@ -98,7 +96,9 @@ class ExperimentLogger:
                     "Answer",
 
 
-                    # Agentic RAG Metrics
+
+                    # Agentic RAG
+
 
                     "PipelineMode",
 
@@ -108,6 +108,7 @@ class ExperimentLogger:
                     "DynamicTopK",
 
 
+
                     "ConfidenceScore",
                     "SimilarityScore",
                     "RetrievalScore",
@@ -115,13 +116,38 @@ class ExperimentLogger:
                     "UncertaintyScore",
 
 
+
                     "RetryCount",
                     "SelfCorrected",
+
+
+
+                    # ReRanking
+
+
+                    "ReRankingEnabled",
+
+                    "ReRankingTime",
+
+                    "AverageReRankScore",
+
+
+
+                    # Relevance Guard
+
+
+                    "KnowledgeAvailable",
+
+                    "RelevanceScore",
+
+                    "GenerationSkipped",
+
 
 
                     "Status"
 
                 ])
+
 
 
     def log(
@@ -159,6 +185,7 @@ class ExperimentLogger:
                 "dynamic_top_k": "NA",
 
 
+
                 "confidence_score": "NA",
 
 
@@ -174,10 +201,12 @@ class ExperimentLogger:
                 "uncertainty_score": "NA",
 
 
+
                 "retry_count": 0,
 
 
                 "self_corrected": False
+
 
             }
 
@@ -212,27 +241,37 @@ class ExperimentLogger:
 
                 experiment_id,
 
+
                 timestamp,
+
 
 
                 config["project"],
 
+
                 config["version"],
+
 
 
                 config["model"],
 
+
                 config["embedding"],
+
 
 
                 config["chunk_size"],
 
+
                 config["overlap"],
+
 
                 config["top_k"],
 
 
+
                 config["documents"],
+
 
                 config["chunks"],
 
@@ -271,9 +310,12 @@ class ExperimentLogger:
 
                 metrics.cpu_percent,
 
+
                 metrics.ram_percent,
 
+
                 metrics.ram_used_gb,
+
 
                 metrics.ram_available_gb,
 
@@ -284,7 +326,9 @@ class ExperimentLogger:
                 ),
 
 
+
                 metrics.retrieved_chunk_count,
+
 
 
                 ", ".join(
@@ -298,7 +342,9 @@ class ExperimentLogger:
 
                 metrics.answer_length,
 
+
                 metrics.word_count,
+
 
                 metrics.character_count,
 
@@ -306,11 +352,12 @@ class ExperimentLogger:
 
                 question,
 
+
                 answer,
 
 
 
-                # Agentic Values
+                # Agentic values
 
 
                 agentic_data[
@@ -318,14 +365,17 @@ class ExperimentLogger:
                 ],
 
 
+
                 agentic_data[
                     "query_type"
                 ],
 
 
+
                 agentic_data[
                     "retrieval_strategy"
                 ],
+
 
 
                 agentic_data[
@@ -339,9 +389,11 @@ class ExperimentLogger:
                 ],
 
 
+
                 agentic_data[
                     "similarity_score"
                 ],
+
 
 
                 agentic_data[
@@ -349,9 +401,11 @@ class ExperimentLogger:
                 ],
 
 
+
                 agentic_data[
                     "completeness_score"
                 ],
+
 
 
                 agentic_data[
@@ -365,12 +419,49 @@ class ExperimentLogger:
                 ],
 
 
+
                 agentic_data[
                     "self_corrected"
                 ],
 
 
 
+                # ReRanking metrics
+
+
+                metrics.reranking_enabled,
+
+
+                round(
+                    metrics.reranking_time,
+                    4
+                ),
+
+
+                round(
+                    metrics.average_rerank_score,
+                    4
+                ),
+
+
+
+                # Relevance Guard metrics
+
+
+                metrics.knowledge_available,
+
+
+                round(
+                    metrics.relevance_score,
+                    4
+                ),
+
+
+                metrics.generation_skipped,
+
+
+
                 status
+
 
             ])
