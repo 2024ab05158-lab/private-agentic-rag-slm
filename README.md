@@ -1915,6 +1915,310 @@ Explainable AI decisions
 Experiment logging
 Performance evaluation
 Modular and extensible software architecture
+
+
+#Phase 6 – Evaluation Framework
+
+##Objective of Evaluation
+
+Objective is to Explain that the evaluation framework was designed to measure the Private Agentic RAG system from multiple perspectives rather than only response accuracy.
+
+The proposed evaluation framework measures retrieval quality, response generation performance, system resource utilization, agentic reasoning effectiveness, confidence estimation, reranking performance, and overall scalability. Every execution of the pipeline is automatically logged, enabling reproducible experiments and comparative analysis across different configurations.
+
+
+6.2 Evaluation Categories
+
+Instead of one long list, organize metrics into categories.
+
+A. Pipeline Performance
+
+Measures
+
+Embedding Time
+Retrieval Time
+Prompt Construction Time
+Generation Time
+Total Execution Time
+
+Purpose
+
+Evaluate computational efficiency.
+
+B. System Resource Utilization
+
+Measures
+
+CPU Usage
+RAM Usage
+RAM Consumed
+Available RAM
+
+Purpose
+
+Evaluate scalability.
+
+C. Retrieval Evaluation
+
+Measures
+
+Retrieved Documents
+Retrieved Chunk Count
+Retrieved Chunk IDs
+Top-K
+Retrieval Strategy
+
+Purpose
+
+Evaluate retrieval quality.
+
+D. Response Quality
+
+Measures
+
+Word Count
+Character Count
+Answer Length
+
+Purpose
+
+Analyze generated responses.
+
+E. Agentic Evaluation
+
+Measures
+
+Confidence Score
+Similarity Score
+Retrieval Score
+Completeness Score
+Uncertainty Score
+Retry Count
+Self Corrected
+
+Purpose
+
+Evaluate the effectiveness of Agentic reasoning.
+
+F. ReRanking Evaluation
+
+Measures
+
+ReRanking Enabled
+ReRanking Time
+Average ReRank Score
+
+Purpose
+
+Measure semantic reranking effectiveness.
+
+G. Relevance Guard
+
+Measures
+
+Knowledge Available
+Relevance Score
+Generation Skipped
+
+Purpose
+
+Prevent hallucinations.
+
+6.3 Metrics Logged
+
+This deserves a table.
+
+Category	Metrics
+Pipeline	EmbeddingTime, RetrievalTime, PromptTime, GenerationTime, TotalTime
+Resources	CPUPercent, RAMPercent, RAMUsedGB
+Retrieval	RetrievedDocuments, ChunkIDs, RetrievedChunkCount
+Response	AnswerLength, WordCount, CharacterCount
+Agentic	ConfidenceScore, SimilarityScore, RetrievalScore, CompletenessScore, UncertaintyScore
+Reflection	RetryCount, SelfCorrected
+ReRanking	ReRankingTime, AverageReRankScore
+Relevance	KnowledgeAvailable, RelevanceScore, GenerationSkipped
+6.4 Experiment Logger
+
+Explain that every execution automatically creates a structured experiment entry.
+
+Example
+
+Experiment
+        ↓
+Pipeline Execution
+        ↓
+Performance Metrics
+        ↓
+Agentic Metrics
+        ↓
+CSV Logger
+        ↓
+Analysis
+        ↓
+Graphs
+6.5 Experiment Analyzer
+
+Talk about
+
+experiment_analyzer.py
+
+It calculates
+
+Average timings
+Average CPU
+Average RAM
+Average response size
+Fastest experiment
+Slowest experiment
+
+Automatically.
+
+6.6 Report Generator
+
+Talk about
+
+generate_report.py
+
+Produces
+
+PRIVATE AGENTIC RAG
+EXPERIMENT SUMMARY
+
+Including
+
+Average timings
+
+Hardware usage
+
+Dataset statistics
+
+Fastest experiment
+
+Models tested
+
+etc.
+
+6.7 Graphs
+
+Mention that graphs are automatically generated.
+
+Include
+
+Response Time
+
+CPU Usage
+
+RAM Usage
+
+Generation Time
+
+Pipeline Breakdown
+
+Word Count
+
+These already exist in your project.
+
+6.8 Evaluation Methodology
+
+Very important.
+
+Explain
+
+Each experiment follows
+
+Configuration
+
+↓
+
+Question
+
+↓
+
+Pipeline
+
+↓
+
+Logging
+
+↓
+
+CSV
+
+↓
+
+Analyzer
+
+↓
+
+Graphs
+
+↓
+
+Summary Report
+6.9 Experimental Scenarios
+
+Instead of generic text, document exactly what can be evaluated.
+
+Example table
+
+Experiment	Objective
+Core vs Agentic	Compare answer quality
+ReRanking	Measure retrieval improvement
+OCR	Digital vs scanned PDFs
+Chunk Size	Retrieval trade-offs
+Top-K	Optimal retrieval
+Confidence Threshold	Reflection behaviour
+Multi-document	Scalability
+Hardware	Laptop vs Server
+Different SLMs	Model comparison
+Knowledge Base Size	FAISS scalability
+6.10 Sample CSV Schema
+
+Very impressive if included.
+
+Show
+
+ExperimentID
+
+Timestamp
+
+Model
+
+EmbeddingModel
+
+ChunkSize
+
+TopK
+
+EmbeddingTime
+
+RetrievalTime
+
+GenerationTime
+
+CPU
+
+RAM
+
+ConfidenceScore
+
+SimilarityScore
+
+RetryCount
+
+ReRankingTime
+
+KnowledgeAvailable
+
+Status
+6.11 Why this framework is unique
+
+This section is important.
+
+Explain
+
+Unlike many existing RAG implementations that evaluate only latency or answer correctness, this project introduces a comprehensive evaluation framework combining pipeline performance, hardware utilization, retrieval quality, agentic reasoning metrics, semantic reranking evaluation, relevance validation, and confidence-based self-correction. The framework enables reproducible experimentation and provides detailed insights into both system behaviour and answer quality.
+
+
 Current Project Status
 Phase	Status
 Phase 1 – Project Foundation	✅ Completed
@@ -1922,6 +2226,8 @@ Phase 2 – Core Private RAG System	✅ Completed
 Phase 3 – Self-Correcting Agentic RAG	✅ Completed
 Phase 4 – Retrieval Improvements & Knowledge Base Management	✅ Completed
 Phase 5 – Interactive Streamlit User Interface	✅ Completed
+Phase 6 – Evaluation Framework ✅ Completed
+
 Project Outcome
 
 The project successfully evolved from a traditional document retrieval system into a fully local, privacy-preserving, self-correcting Agentic Retrieval-Augmented Generation framework. By integrating semantic retrieval, intelligent planning, reranking, reflection, confidence evaluation, self-correction, OCR support, comprehensive experiment logging, and an interactive Streamlit interface, the system demonstrates a practical and extensible architecture for secure enterprise document question answering. The modular design also provides a strong foundation for future enhancements such as hybrid retrieval, GraphRAG, multimodal document understanding, and advanced agent orchestration.
