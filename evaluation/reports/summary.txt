@@ -1,0 +1,34 @@
+======================================================================
+PRIVATE AGENTIC RAG - EXPERIMENT SUMMARY
+======================================================================
+
+Total Experiments       : 32
+Models Tested           : 1
+Latest Model            : mistral
+
+----------- PERFORMANCE -----------
+Average Embedding Time  : 0.1212 sec
+Average Retrieval Time  : 0.7467 sec
+Average Prompt Time     : 0.0000 sec
+Average Generation Time : 112.5935 sec
+Average Total Time      : 113.7624 sec
+
+----------- SYSTEM -----------
+Average CPU Usage       : 73.88%
+Average RAM Usage       : 93.68%
+Average RAM Used        : 14.70 GB
+
+----------- RESPONSE -----------
+Average Words           : 109.19
+Average Characters      : 718.16
+
+----------- DATASET -----------
+Documents Indexed       : 1
+Total Chunks            : 5
+
+----------- FASTEST RUN -----------
+Experiment ID           : EXP20260722225405
+Model                   : mistral
+Time                    : 33.50 sec
+
+======================================================================

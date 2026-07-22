@@ -21,6 +21,7 @@ from application.agents.planner_agent import PlannerAgent
 from application.agents.retrieval_agent import RetrievalAgent
 from application.agents.reflection_agent import ReflectionAgent
 from application.agents.relevance_agent import RelevanceAgent
+from application.utils.process_monitor import ProcessMonitor
 
 
 from application.rag_pipeline.pipeline_metrics import PipelineMetrics
@@ -438,7 +439,13 @@ class AgenticRAG:
 
 
 
-        metrics.cpu_percent = psutil.cpu_percent(interval=0.1)
+        #metrics.cpu_percent = psutil.cpu_percent(interval=0.1)
+
+        # ----------------------------------
+        # CPU Metrics
+        # ----------------------------------
+
+        metrics.cpu_percent = ProcessMonitor.get_peak_cpu()
 
 
 

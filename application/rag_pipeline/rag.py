@@ -15,12 +15,14 @@ Responsible for:
 """
 
 import time
+
 import psutil
 
 from application.embedd.embedder import model
 from application.retrieve.retriever import retrieve
 from application.slm.slm import generate_response
 from application.rag_pipeline.pipeline_metrics import PipelineMetrics
+from application.utils.process_monitor import ProcessMonitor
 
 
 def build_prompt(context_chunks, query):
@@ -153,7 +155,8 @@ def run_query_pipeline(store, query):
     # CPU METRICS
     # ==========================================================
 
-    metrics.cpu_percent = psutil.cpu_percent(interval=0.1)
+    metrics.cpu_percent = ProcessMonitor.get_peak_cpu()
+
 
     # ==========================================================
     # MEMORY METRICS
