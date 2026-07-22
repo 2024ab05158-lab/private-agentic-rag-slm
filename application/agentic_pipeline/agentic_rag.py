@@ -438,7 +438,7 @@ class AgenticRAG:
 
 
 
-        metrics.cpu_percent = psutil.cpu_percent()
+        metrics.cpu_percent = psutil.cpu_percent(interval=0.1)
 
 
 

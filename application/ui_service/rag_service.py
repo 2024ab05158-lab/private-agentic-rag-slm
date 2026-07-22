@@ -16,6 +16,7 @@ Supports:
 
 
 import os
+from unittest import result
 
 import faiss
 
@@ -739,15 +740,7 @@ def run_rag(
 
 
 
-    result = pipeline.execute(
-
-        query,
-
-        mode
-
-    )
-
-
+    result = pipeline.execute(query, mode)
 
     return result
 
