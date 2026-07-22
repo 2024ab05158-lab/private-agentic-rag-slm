@@ -26,6 +26,363 @@ Large Language Models have demonstrated impressive reasoning capabilities, but t
 
 To address these challenges, this project proposes a fully local, privacy-preserving Agentic Retrieval-Augmented Generation framework capable of evaluating its own retrieval quality and improving answers through self-correction.
 
+
+# Private Agentic RAG SLM
+
+> **Design and Evaluation of a Self-Correcting, Privacy-Preserving Agentic RAG System using Quantized Small Language Models**
+
+A fully local Retrieval-Augmented Generation (RAG) system that combines semantic retrieval, intelligent planning, semantic reranking, reflection, and self-correction to improve response quality while ensuring complete data privacy.
+
+---
+
+## Features
+
+- Fully Local RAG (No cloud APIs)
+- Privacy-Preserving Document Processing
+- Core RAG and Self-Correcting Agentic RAG Pipelines
+- Semantic Retrieval using FAISS
+- SentenceTransformer (all-MiniLM-L6-v2) Embeddings
+- Dynamic Top-K Retrieval
+- Planner Agent
+- Retrieval Agent
+- Cross-Encoder Semantic Re-Ranking
+- Relevance Validation
+- Reflection Agent
+- Confidence-based Self-Correction
+- OCR Support for Scanned PDFs
+- Multi-Document Knowledge Base
+- Streamlit Web Interface
+- Automatic Experiment Logging
+- Performance Evaluation and Graph Generation
+
+---
+
+# Technology Stack
+
+| Component | Technology |
+|-----------|------------|
+| Programming Language | Python 3.10+ |
+| Local LLM | Mistral (via Ollama) |
+| Embedding Model | all-MiniLM-L6-v2 |
+| Vector Database | FAISS |
+| Re-Ranking | Cross Encoder |
+| OCR | Tesseract OCR |
+| PDF Processing | PyMuPDF |
+| Frontend | Streamlit |
+| Evaluation | Pandas, Matplotlib |
+
+---
+
+# Project Structure
+
+```
+private-agentic-rag-slm/
+│
+├── application/
+├── data/
+├── evaluation/
+├── models/
+├── notebooks/
+├── testing/
+├── requirements.txt
+├── README.md
+└── main.py
+```
+
+---
+
+# Prerequisites
+
+Install the following before running the project.
+
+- Python 3.10 or later
+- Git
+- Ollama
+- Tesseract OCR
+
+---
+
+# Step 1: Clone the Repository
+
+```bash
+git clone https://github.com/<YOUR_USERNAME>/private-agentic-rag-slm.git
+
+cd private-agentic-rag-slm
+```
+
+---
+
+# Step 2: Create a Virtual Environment
+
+### Windows
+
+```bash
+python -m venv .venv
+
+.venv\Scripts\activate
+```
+
+### Linux / macOS
+
+```bash
+python3 -m venv .venv
+
+source .venv/bin/activate
+```
+
+---
+
+# Step 3: Install Python Dependencies
+
+```bash
+pip install --upgrade pip
+
+pip install -r requirements.txt
+```
+
+---
+
+# Step 4: Install Ollama
+
+Download Ollama
+
+https://ollama.com/download
+
+Verify installation
+
+```bash
+ollama --version
+```
+
+---
+
+# Step 5: Download the Mistral Model
+
+```bash
+ollama pull mistral
+```
+
+Verify
+
+```bash
+ollama list
+```
+
+You should see
+
+```
+mistral
+```
+
+---
+
+# Step 6: Install Tesseract OCR
+
+### Windows
+
+Download:
+
+https://github.com/UB-Mannheim/tesseract/wiki
+
+During installation, add Tesseract to the system PATH.
+
+Verify
+
+```bash
+tesseract --version
+```
+
+---
+
+# Step 7: Start Ollama
+
+Open a **new terminal**
+
+Run
+
+```bash
+ollama serve
+```
+
+If the service is already running, you can skip this step.
+
+---
+
+# Step 8: Launch the Application
+
+From the project root
+
+```bash
+streamlit run main.py
+```
+
+The application will open automatically in your browser.
+
+Default URL
+
+```
+http://localhost:8501
+```
+
+---
+
+# Using the Application
+
+## Build the Knowledge Base
+
+1. Open the application.
+2. Upload one or more PDF documents.
+3. Click **Build Knowledge Base**.
+4. Wait until indexing completes.
+
+---
+
+## Ask Questions
+
+Select either:
+
+- Core RAG
+- Agentic RAG
+
+Enter a question.
+
+Example:
+
+```
+What are the networking requirements for Azure Stack HCI?
+```
+
+The application retrieves relevant document chunks and generates an answer using the selected pipeline.
+
+---
+
+# Agentic RAG Workflow
+
+```
+User Query
+      │
+      ▼
+Planner Agent
+      │
+      ▼
+Retrieval Agent
+      │
+      ▼
+Cross Encoder ReRanking
+      │
+      ▼
+Relevance Validation
+      │
+      ▼
+Prompt Construction
+      │
+      ▼
+Mistral (Ollama)
+      │
+      ▼
+Reflection Agent
+      │
+      ▼
+Confidence Evaluation
+      │
+      ▼
+Self-Correction (if required)
+      │
+      ▼
+Final Response
+```
+
+---
+
+# Evaluation
+
+The project automatically logs:
+
+- Execution Time
+- CPU Usage
+- RAM Usage
+- Retrieval Score
+- Similarity Score
+- Relevance Score
+- Confidence Score
+- Completeness Score
+- Uncertainty Score
+- Retry Count
+- Self-Correction
+- Dynamic Top-K
+- Re-Ranking Time
+
+Graphs are generated automatically inside:
+
+```
+evaluation/graphs/
+```
+
+---
+
+# Troubleshooting
+
+## Ollama not found
+
+Verify
+
+```bash
+ollama --version
+```
+
+---
+
+## Mistral not available
+
+Download
+
+```bash
+ollama pull mistral
+```
+
+---
+
+## Tesseract not detected
+
+Verify
+
+```bash
+tesseract --version
+```
+
+Ensure the executable is added to your PATH.
+
+---
+
+## Missing Python Packages
+
+Run
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+# References
+
+This work was developed as part of the M.Tech dissertation:
+
+**Design and Evaluation of a Self-Correcting, Privacy-Preserving Agentic RAG System using Quantized Small Language Models**
+
+Birla Institute of Technology and Science (BITS), Pilani.
+
+---
+
+# License
+
+This repository is intended for academic and research purposes.
+
+
+
+
+
+
 ## Development Methodology
 
 The project followed an incremental modular development methodology.
