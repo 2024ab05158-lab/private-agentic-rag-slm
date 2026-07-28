@@ -5,6 +5,7 @@
 
 # Core Machine Learning
 torch>=2.2.0
+torchvision>=0.17.0
 transformers>=4.40.0
 sentence-transformers>=2.7.0
 scikit-learn>=1.4.0
@@ -38,3 +39,8 @@ psutil>=5.9.0
 # Utilities
 requests>=2.31.0
 python-dotenv>=1.0.1
+
+# Hugging Face
+huggingface_hub>=0.23.0
+safetensors>=0.4.0
+tokenizers>=0.15.0
