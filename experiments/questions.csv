@@ -1,0 +1,122 @@
+﻿Question
+What is the purpose of this upgrade guide?
+Which operating system versions does this guide cover?
+Which HPE GreenLake release version does this document support?
+What are the five high-level upgrade steps?
+Which upgrade method is recommended by Microsoft?
+Which tool can be used to perform the OS upgrade?
+What is Step 2 after the operating system upgrade?
+Which feature must be installed before applying the solution upgrade?
+What is the purpose of Network ATC?
+Which validation step is performed before applying the solution upgrade?
+What happens after the operating system upgrade completes?
+Which Windows feature update is installed during the upgrade?
+Which cmdlet upgrades the cluster functional level?
+Which cmdlet upgrades the storage pool?
+What PowerShell command lists existing virtual switches?
+Which PowerShell command pauses a cluster node?
+Which PowerShell command resumes a cluster node?
+Which Azure portal step follows solution validation?
+Which Windows feature installs Network ATC?
+Which document section discusses Active Directory preparation?
+How do you connect to an Azure Stack HCI cluster using Windows Admin Center?
+Describe the operating system upgrade process from 22H2 to 23H2.
+How do you perform post-OS upgrade tasks?
+How do you update the cluster functional level?
+How do you upgrade the storage pool version?
+Explain how to install Network ATC.
+Describe the process for pausing a cluster node before Network ATC deployment.
+How do you remove the existing Compute VMSwitch?
+How do you remove the existing Management VMSwitch?
+Explain how to remove existing NetQoS policies.
+How do you start the Network ATC service?
+Describe the steps to create Management Intent.
+Describe the steps to create Compute Intent.
+Describe the steps to create Storage Intent.
+How do you verify Network ATC deployment?
+Explain how to rename VMSwitches.
+Describe the process of reconnecting virtual machines after switch renaming.
+How do you apply Network ATC across all cluster nodes?
+How do you run the Environment Checker?
+How do you apply the solution upgrade through Azure Portal?
+Explain the complete workflow from OS upgrade to solution upgrade.
+Describe the sequence required before installing Network ATC.
+Explain why cluster functional level should be updated after the OS upgrade.
+Describe the complete Network ATC deployment process.
+Explain how Network ATC modifies networking in the cluster.
+Describe how virtual switch renaming impacts virtual machines.
+Explain the complete validation workflow before applying the solution upgrade.
+Describe how Windows Admin Center manages updates.
+Explain how storage pool upgrades fit into the upgrade workflow.
+"Describe how Compute, Storage, and Management intents are configured."
+Explain why one node is paused during Network ATC deployment.
+Describe the steps required after resuming the paused node.
+Explain how live migration settings are validated.
+Describe the complete switch reconfiguration process.
+Explain how Aruba switch configuration supports Network ATC.
+Describe how update readiness is verified.
+Explain how the deployment status of Network ATC intents is verified.
+Describe the complete post-upgrade validation workflow.
+Explain how the Azure Portal is used throughout the solution upgrade.
+Describe the end-to-end upgrade lifecycle.
+What is Azure Stack HCI?
+What is HPE GreenLake for Azure Stack HCI?
+What is Cluster Functional Level?
+What is a Storage Pool?
+What is Cluster Aware Updating?
+What is Network ATC?
+What is a VMSwitch?
+What is a Network Intent?
+What is CredSSP?
+What is Windows Admin Center?
+What is Azure Arc?
+What is an integrated hardware partner extension?
+What is the purpose of Readiness Checks?
+Why is Kernel Soft Reboot disabled during upgrade?
+Why are firmware updates important during OS upgrade?
+Why is Network ATC mandatory before solution upgrade?
+Why are similar adapters required in a SET team?
+Why is storage synchronization expected after reboot?
+What are post Network ATC observations?
+Why are validation tests performed before solution upgrade?
+Summarize the entire upgrade guide.
+Summarize the OS upgrade process.
+Summarize the post-upgrade tasks.
+Summarize the Network ATC deployment process.
+Summarize the validation process.
+Summarize the solution upgrade process.
+Summarize the prerequisites for upgrading.
+Summarize supported workloads discussed in the guide.
+Summarize the changes introduced after upgrading to 23H2.
+Summarize the Windows roles required for version 23H2.
+What are the most important considerations before beginning the upgrade?
+What risks are highlighted during the upgrade process?
+What best practices are recommended throughout the document?
+Compare the different OS upgrade methods discussed.
+Compare PowerShell and Windows Admin Center for upgrading.
+Explain why the guide recommends a phased deployment of Network ATC.
+What are the key networking changes introduced by Network ATC?
+Explain the relationship between OS upgrade and solution upgrade.
+What validations ensure a successful deployment?
+What are the key takeaways from this upgrade guide?
+Who won the FIFA World Cup in 2022?
+Who has scored the most runs in ODI cricket?
+Which country hosted the 2024 Olympic Games?
+What is the offside rule in football?
+Who is known as the King of Clay in tennis?
+What is the plot of The Shawshank Redemption?
+Who directed the movie Inception?
+Which movie won the Academy Award for Best Picture in 2023?
+Who played Iron Man in the Marvel Cinematic Universe?
+What is the storyline of Interstellar?
+Who wrote Hamlet?
+What is the theme of Pride and Prejudice?
+Who is the author of 1984?
+What is the significance of the green light in The Great Gatsby?
+What is a sonnet in English literature?
+What is the capital city of Japan?
+Explain the theory of relativity.
+What causes earthquakes?
+What is machine learning?
+How does photosynthesis work?
+What causes Rain?
