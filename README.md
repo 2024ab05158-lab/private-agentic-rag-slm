@@ -102,138 +102,455 @@ Install the following before running the project.
 
 ---
 
-# Step 1: Clone the Repository
+Private Agentic RAG System - Complete Installation Guide (Windows)
 
-```bash
-git clone https://github.com/<YOUR_USERNAME>/private-agentic-rag-slm.git
+Step 1: Install Prerequisites
+Before cloning or running the project, install the following software.
+1. Install Git
+
+Download:
+
+https://git-scm.com/downloads
+
+Verify:
+
+git --version
+
+Expected:
+
+git version 2.x.x
+2. Install Python
+
+Install Python 3.11 or 3.12.
+
+Download:
+
+https://www.python.org/downloads/
+
+During installation check:
+
+☑ Add Python to PATH
+
+Verify:
+
+python --version
+
+Example:
+
+Python 3.12.x
+3. Install Visual Studio Build Tools (Recommended)
+
+Some packages require compilation.
+
+Download:
+
+https://visualstudio.microsoft.com/visual-cpp-build-tools/
+
+Install:
+
+Desktop development with C++
+Windows SDK
+
+----------------------------------------------------------------------------------------------------
+
+
+
+1. Created a Folder in C drive :--> "C:\Projects"
+
+2. Will Clone the repository inside the projects. git Clone https://github.com/2024ab05158-lab/private-agentic-rag-slm.git
+
+3. Now cd private-agentic-rag-slm.git
+
+----------------------------------------------------------------------------------------------------
+
+
+Step 2: Clone the Repository
+
+Open Command Prompt.
+
+Go to the directory where you want the project. "C drive :--> "C:\Projects""
+
+Example:
+
+
+
+Clone:
+
+git Clone https://github.com/2024ab05158-lab/private-agentic-rag-slm.git
+
+
+Move inside:
 
 cd private-agentic-rag-slm
-```
 
----
+Verify:
 
-# Step 2: Create a Virtual Environment
+dir
 
-### Windows
+You should see:
 
-```bash
+application/
+data/
+evaluation/
+experiments/
+logs/
+testing/
+ui/
+
+main.py
+requirements.txt
+README.md
+
+If you see another folder named
+
+private-agentic-rag-slm
+
+inside this directory, ignore or remove it if it only contains empty files. Your project root is the directory containing application/, main.py, and requirements.txt.
+
+-------------------------------------------------------------------------------------------------
+Step 3: Create Virtual Environment
 python -m venv .venv
 
+Wait until it completes.
+
+Verify:
+
+dir
+
+You should now see
+
+.venv
+
+-------------------------------------------------------------------------------------------------
+
+Step 4: Activate Virtual Environment
+
+Command Prompt
+
 .venv\Scripts\activate
-```
 
-### Linux / macOS
+Your prompt should change to
 
-```bash
-python3 -m venv .venv
+(.venv)
 
-source .venv/bin/activate
-```
+Example:
 
----
+(.venv) C:\Users\private-agentic-rag-slm>
 
-# Step 3: Install Python Dependencies
 
-```bash
-pip install --upgrade pip
+-------------------------------------------------------------------------------------------------
 
-pip install -r requirements.txt
-```
+Step 5: Verify Virtual Environment
 
----
+Run
 
-# Step 4: Install Ollama
+where python
 
-Download Ollama
+Expected first result:
 
-https://ollama.com/download
+C:\Users\private-agentic-rag-slm\.venv\Scripts\python.exe
 
-Verify installation
+Run
 
-```bash
-ollama --version
-```
+where pip
 
----
+Expected
 
-# Step 5: Download the Mistral Model
+C:\Users\private-agentic-rag-slm\.venv\Scripts\pip.exe
 
-```bash
-ollama pull mistral
-```
+If not, the virtual environment isn't active.
+
+
+-------------------------------------------------------------------------------------------------
+
+
+
+Step 6: Upgrade pip
+python -m pip install --upgrade pip
 
 Verify
 
-```bash
-ollama list
-```
+pip --version
+
+-------------------------------------------------------------------------------------------------
+
+Step 7: Install Project Dependencies
+
+Install:
+
+pip install -r requirements.txt
+
+This may take several minutes.
+
+Do not interrupt it.
+
+-------------------------------------------------------------------------------------------------
+
+Step 8: Verify Dependencies
+
+Run:
+
+pip show streamlit
+pip show torch
+pip show torchvision
+pip show sentence-transformers
+pip show faiss-cpu
+
+Each command should display package information rather than "Package(s) not found."
+
+
+-------------------------------------------------------------------------------------------------
+
+
+Step 9: Create the Models Folder
+
+Your repository intentionally excludes this directory because of its size.
+
+Create it:
+
+mkdir models
+
+Verify:
+
+dir
+
+You should now see
+
+models
+
+-------------------------------------------------------------------------------------------------
+
+
+Before Step 10 :
+
+Download the latest Microsoft Visual C++ Redistributable (x64) from Microsoft's official site:
+
+https://aka.ms/vs/17/release/vc_redist.x64.exe
+
+Restart the system, 
+
+The go back to your venv as mentioned earlier.
+
+Verify using the below
+
+Test PyTorch before trying Sentence Transformers:
+
+python
+
+Then run:
+
+
+import torch
+print(torch.__version__)
+
+Once it prints the version proceed to step 10.
+
+-------------------------------------------------------------------------------------------------
+
+step 10: Download the Embedding Model (One-Time)
+
+Start Python:
+
+python
+
+Run these commands one at a time:
+
+from sentence_transformers import SentenceTransformer
+model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+
+Wait for the download.
+
+Then:
+
+model.save("models/all-MiniLM-L6-v2")
+
+Exit Python:
+
+exit()
+
+Verify:
+
+dir models
 
 You should see
 
-```
+all-MiniLM-L6-v2
+
+-------------------------------------------------------------------------------------------------
+
+
+Step 11: Download the Cross Encoder
+
+Start Python again:
+
+python
+
+Run:
+
+from sentence_transformers import CrossEncoder
+model = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+
+Wait for the download.
+
+Then:
+
+model.save("models/ms-marco-MiniLM-L-6-v2")
+
+Exit Python.
+
+Verify:
+
+dir models
+
+You should now see
+
+models
+
+├── all-MiniLM-L6-v2
+└── ms-marco-MiniLM-L-6-v2
+
+
+-------------------------------------------------------------------------------------------------
+
+Step 12: Install Ollama
+
+Download:
+
+https://ollama.com/download
+
+Verify:
+
+ollama --version
+
+-------------------------------------------------------------------------------------------------
+Step 13: Download the Mistral Model
+ollama pull mistral
+
+Verify:
+
+ollama list
+
+Expected:
+
 mistral
-```
 
----
-
-# Step 6: Install Tesseract OCR
-
-### Windows
+-------------------------------------------------------------------------------------------------
+Step 14: Install Tesseract OCR
 
 Download:
 
 https://github.com/UB-Mannheim/tesseract/wiki
 
-During installation, add Tesseract to the system PATH.
+During installation enable:
 
-Verify
+Add Tesseract to PATH
 
-```bash
+Verify:
+
 tesseract --version
-```
 
----
+-------------------------------------------------------------------------------------------------
+Step 15: Configure Tesseract (if required)
 
-# Step 7: Start Ollama
+If your application uses a fixed Tesseract path, ensure it matches your installation. Otherwise, confirm that tesseract is available on your system PATH.
 
-Open a **new terminal**
+-------------------------------------------------------------------------------------------------
 
-Run
+Step 16: Start Ollama
 
-```bash
+Open a second Command Prompt.
+
+Run:
+
 ollama serve
-```
 
-If the service is already running, you can skip this step.
+If you see:
 
----
+Error: address already in use
 
-# Step 8: Launch the Application
+Ollama is already running, which is fine.
 
-From the project root
+Leave this terminal open.
 
-```bash
-streamlit run main.py
-```
+-------------------------------------------------------------------------------------------------
 
-The application will open automatically in your browser.
+Step 17: Return to Project Terminal
 
-Default URL
+Confirm you're in:
 
-```
-http://localhost:8501
-```
+(.venv)
+C:\Users\private-agentic-rag-slm
 
----
+-------------------------------------------------------------------------------------------------
+Step 18: Launch Streamlit
 
-# Using the Application
+Run:
 
-## Build the Knowledge Base
+streamlit run ui/app.py
 
-1. Open the application.
-2. Upload one or more PDF documents.
-3. Click **Build Knowledge Base**.
-4. Wait until indexing completes.
+-------------------------------------------------------------------------------------------------
+
+Step 19: Open the Application
+
+
+
+Step 20: Build the Knowledge Base
+
+Within the application:
+
+Open the Knowledge Base page.
+Add your PDF documents if required.
+Click Build Knowledge Base.
+Wait for:
+PDF extraction
+OCR (if needed)
+Chunk generation
+Embedding creation
+FAISS index creation
+Confirm the build completes successfully.
+Step 21: Test the Application
+
+Try queries such based on the document
+
+Verify that responses are generated and that your retrieval, reranking, and reflection pipeline behaves as expected.
+
+One-Time Setup vs Every Run
+Only once per machine
+Install Python
+Install Git
+Clone repository
+Create virtual environment
+Install dependencies
+Download MiniLM model
+Download Cross-Encoder model
+Install Ollama
+Pull the Mistral model
+Install Tesseract
+Every time you want to run the application
+
+Open a terminal:
+
+cd C:\Users\private-agentic-rag-slm
+
+Activate the environment:
+
+.venv\Scripts\activate
+
+Start Ollama (if it isn't already running):
+
+ollama serve
+
+In another terminal:
+
+cd C:\Users\private-agentic-rag-slm
+
+Activate the environment:
+
+.venv\Scripts\activate
+
+Run:
+
+streamlit run ui/app.py
 
 ---
 
